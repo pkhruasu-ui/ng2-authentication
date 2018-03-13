@@ -1,2 +1,29 @@
 <h1>Welcome to Angular</h1>
 <h3>Hello from {{componentName}}</h3>
+<form [formGroup]="myForm" novalidate (ngSubmit)="onSubmit(myForm.valid)">
+    <input type="text" maxlength="20"  formControlName="username" placeholder="username">
+    <input type="email" placeholder="email" formControlName="email">
+    <input type="password" maxlength="20" formControlName="password" placeholder="password">
+    <input type="password" maxlength="20" formControlName="passwordConf" placeholder="confirm password">
+    <button type="submit">Submit</button>
+</form>
+
+
+<h3>Login form</h3>
+<form [formGroup]="loginForm" novalidate (ngSubmit)="onLogin(loginForm.valid)">
+    <input type="email" placeholder="email" formControlName="logemail">
+    <input type="password" maxlength="20" formControlName="logpassword" placeholder="password">
+    <button type="submit">Submit</button>
+</form>
+
+<div>
+    <button (click)="getSession()">Get session</button>
+</div>
+<div>
+    <button (click)="logout()">Log out</button>
+</div>
+
+<h3>Session info</h3>
+<div>
+    {{session | json}}
+</div>

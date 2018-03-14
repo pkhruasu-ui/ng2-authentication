@@ -2,11 +2,11 @@ var express = require('express');
 var router = express.Router();
 var User = require('../models/schema.js');
 
-// GET
-router.get('/', function (req, res, next) {
-    return res.sendFile(__dirname + '/security/index.html');
-    // return res.send('working');
-});
+// // GET
+// router.get('/', function (req, res, next) {
+//     return res.sendFile(__dirname + '/security/index.html');
+//     // return res.send('working');
+// });
 
 router.post('/login', function (req, res, next) {
     var err;
@@ -25,29 +25,27 @@ router.post('/login', function (req, res, next) {
         //use schema.create to insert data into db
         User.create(userData, function (err, user) {
             if (err) {
-                // console.log(3, err);
                 return next(err);
                 // return res.status(500).json(err.toJSON());
             } else {
-                // console.log(4);
+                req.session.userId = user.id;
+                req.session.username = user.username;
                 // return res.redirect('/profile');
-                return res.status(200).json({status: 'signup ok'});
+                return res.status(200).json({ status: 'signup ok', session: req.session});
             }
         })
     } else if (req.body.logemail && req.body.logpassword) {
         // user login normally, authenticate first
-        // console.log(6, req.body);
         User.authenticate(req.body.logemail, req.body.logpassword, function (err, user) {
             if (err || !user) {
-                // console.log(7,err);
                 err = new Error('Wrong email or password');
                 err.status = 400;
                 return next(err);
             } else {
-                // console.log(8,user);
                 req.session.userId = user.id;
+                req.session.username = user.username;
                 // return res.redirect('/profile');
-                return res.status(200).json({status: 'login ok'});
+                return res.status(200).json({status: 'login ok', session: req.session});
             }
         })
     } else {
@@ -77,9 +75,9 @@ router.get('/logout',function(req,res,next){
     }
 });
 
-router.get('/profile',requireLogin, function(req,res,next){
-    return res.sendFile(__dirname + '/security/index.html');
-});
+// router.get('/profile',requireLogin, function(req,res,next){
+//     return res.sendFile(__dirname + '/security/index.html');
+// });
 
 function requireLogin(req,res,next){
     if(req.session && req.session.userId){

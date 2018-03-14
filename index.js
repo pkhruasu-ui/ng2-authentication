@@ -39,21 +39,26 @@ app.use(bodyParser.urlencoded({ extended: false}));
 var routes = require('./routes/router');
 app.use('/', routes);
 
-// 404
-app.use(function(req,res,next){
-   var err = new Error('File not found');
-    err.statusCode = 404;
-    next(err);
+app.all('*',function(req, res, next) {
+    // console.log(11, __dirname + '/dist/index.html');
+    return res.sendFile(__dirname + '/dist/index.html');
 });
 
+// 404
+// app.use(function(req,res,next){
+//    var err = new Error('File not found');
+//     err.statusCode = 404;
+//     next(err);
+// });
+
 // 500
-app.use(function(err, req, res, next){
-    res.status(err.statusCode || 500);
-    res.json(500,{
-        message: err.message,
-        error: {}
-    });
-});
+// app.use(function(err, req, res, next){
+//     res.status(err.statusCode || 500);
+//     res.json(500,{
+//         message: err.message,
+//         error: {}
+//     });
+// });
 
 app.listen(3000, function() {
     console.log("Express app listening port 3000");

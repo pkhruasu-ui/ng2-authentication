@@ -1,6 +1,7 @@
 import {Component, OnInit, AfterViewInit, OnDestroy, Injectable}        from '@angular/core';
 import {FormGroup, FormBuilder, Validators, FormControl}    from '@angular/forms';
 import {ApiService} from './apiservice';
+import { Router, ActivatedRoute } from '@angular/router'
 
 @Component({
     selector: 'app-root',
@@ -8,29 +9,58 @@ import {ApiService} from './apiservice';
 })
 export class AppComponent implements OnInit {
     constructor(private fb:FormBuilder,
-                private apiService:ApiService) {
+                private apiService:ApiService,
+                private router:Router,
+                private route: ActivatedRoute) {
     }
 
     public componentName = "My app Component";
     public myForm:FormGroup;
     public loginForm: FormGroup;
     public session:any;
+    public username:string = '';
 
     ngOnInit() {
-        var day = new Date();
-        var d: any = day.getTime();
+
+        let user = localStorage.getItem('currentUser');
+        if(user){
+            this.username = user;
+            // user has already logged in
+        }
+
+        this.initAuthenticationForm();
+
+    }
+
+
+    initAuthenticationForm(){
 
         this.myForm = this.fb.group({
-            'username': ['Prajak_' +  d, [Validators.required]],
-            'email': ['prajak' + d + '@gmail.com', [Validators.required]],
+            'username': ['prajak', [Validators.required]],
+            'email': ['prajak@gmail.com', [Validators.required]],
             'password': ['something', [Validators.required]],
             'passwordConf': ['something', [Validators.required]]
         });
 
         this.loginForm = this.fb.group({
-            'logemail': ['prajak' + d + '@gmail.com', [Validators.required]],
+            'logemail': ['prajak@gmail.com', [Validators.required]],
             'logpassword': ['something', [Validators.required]]
-        })
+        });
+
+        // var day = new Date();
+        // var d: any = day.getTime();
+        //
+        // this.myForm = this.fb.group({
+        //     'username': ['Prajak_' +  d, [Validators.required]],
+        //     'email': ['prajak' + d + '@gmail.com', [Validators.required]],
+        //     'password': ['something', [Validators.required]],
+        //     'passwordConf': ['something', [Validators.required]]
+        // });
+        //
+        // this.loginForm = this.fb.group({
+        //     'logemail': ['prajak' + d + '@gmail.com', [Validators.required]],
+        //     'logpassword': ['something', [Validators.required]]
+        // })
     }
 
     onSubmit(valid) {
@@ -42,8 +72,10 @@ export class AppComponent implements OnInit {
             password: form.password,
             passwordConf: form.passwordConf
         }).subscribe(
-            (response) => {
+            (response:any) => {
                 console.log(response);
+                this.username = response.session.username;
+                this.router.navigate([this.route.queryParams['returnUrl'] || '/profile']);
             },
             (error) => {
                 console.log(error)
@@ -60,8 +92,10 @@ export class AppComponent implements OnInit {
             logemail: form.logemail,
             logpassword: form.logpassword
         }).subscribe(
-            (response) => {
+            (response:any) => {
                 console.log(response);
+                this.username = response.session.username;
+                this.router.navigate([this.route.queryParams['returnUrl'] || '/profile']);
             },
             (error) => {
                 console.log(error)
@@ -72,8 +106,10 @@ export class AppComponent implements OnInit {
     }
 
     getSession(){
-        this.apiService.getSession().subscribe((response) => {
+        this.apiService.getSession().subscribe(
+            (response:any) => {
                 console.log(response);
+                this.username = response.session.username;
                 this.session = response;
             },
             (error) => {
@@ -87,6 +123,8 @@ export class AppComponent implements OnInit {
     logout(){
         this.apiService.getLogout().subscribe((response) => {
                 console.log(response);
+                this.username = '';
+                this.router.navigate(['/']);
             },
             (error) => {
                 console.log(error)

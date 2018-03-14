@@ -1,5 +1,6 @@
 <h1>Welcome to Angular</h1>
 <h3>Hello from {{componentName}}</h3>
+<h4>{{username}}</h4>
 <form [formGroup]="myForm" novalidate (ngSubmit)="onSubmit(myForm.valid)">
     <input type="text" maxlength="20"  formControlName="username" placeholder="username">
     <input type="email" placeholder="email" formControlName="email">
@@ -27,3 +28,10 @@
 <div>
     {{session | json}}
 </div>
+<br>
+<nav>
+    <a routerLink="/" routerLinkActive="active">Index</a>
+    <a routerLink="/profile" routerLinkActive="active">Guest</a>
+</nav>
+
+<router-outlet></router-outlet>

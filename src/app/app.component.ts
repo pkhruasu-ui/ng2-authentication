@@ -19,6 +19,7 @@ export class AppComponent implements OnInit {
     public loginForm: FormGroup;
     public session:any;
     public username:string = '';
+    public currentTime:any;
 
     ngOnInit() {
 
@@ -81,7 +82,6 @@ export class AppComponent implements OnInit {
                 console.log(error)
             },
             () => {
-                console.log("complete ajax");
             });
     }
 
@@ -101,7 +101,6 @@ export class AppComponent implements OnInit {
                 console.log(error)
             },
             () => {
-                console.log("complete ajax");
             });
     }
 
@@ -116,7 +115,6 @@ export class AppComponent implements OnInit {
                 console.log(error)
             },
             () => {
-                console.log("complete ajax");
             })
     }
 
@@ -130,7 +128,16 @@ export class AppComponent implements OnInit {
                 console.log(error)
             },
             () => {
-                console.log("complete ajax");
             })
+    }
+    
+    getTime(){
+        this.apiService.getTime().subscribe((response:any) => {
+            this.currentTime = new Date(response.currentTime);
+        },
+        (error) => {
+            console.log(error);
+        }, () => {
+        })
     }
 }

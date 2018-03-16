@@ -10,6 +10,8 @@ import {HomeComponent} from './home/home.component';
 import {ProfileComponent} from './profile/profile.component';
 // login guard
 import {LoginGuard} from './login.guard';
+// cookie
+import {CookieService} from './cookie.service';
 
 
 const routes:Routes = [
@@ -38,7 +40,7 @@ const routes:Routes = [
         ReactiveFormsModule,
         RouterModule.forRoot(routes)
     ],
-    providers: [ApiService, LoginGuard],
+    providers: [ApiService, LoginGuard, CookieService],
     bootstrap: [AppComponent]
 })
 export class AppModule {

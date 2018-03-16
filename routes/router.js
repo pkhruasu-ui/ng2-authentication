@@ -75,6 +75,11 @@ router.get('/logout',function(req,res,next){
     }
 });
 
+router.get('/api/timer',requireLogin, function(req,res,next){
+    var d = new Date();
+    return res.status(200).json( { 'currentTime' : d.toISOString() } );
+});
+
 // router.get('/profile',requireLogin, function(req,res,next){
 //     return res.sendFile(__dirname + '/security/index.html');
 // });
@@ -88,5 +93,16 @@ function requireLogin(req,res,next){
         return next(err);
     }
 }
+
+
+router.get('/api/keepalive', function(req, res, next) {
+
+    req.session.touch(req.sessionID, req.session);
+    req.session._garbage = Date();  // garbage property, to force update on sso
+    req.session.save(function(err){
+        return res.status(200).json({ session: req.session});
+    });
+    
+}); 
 
 module.exports = router;

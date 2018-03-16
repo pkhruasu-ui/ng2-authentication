@@ -1,4 +1,3 @@
-<h1>Welcome to Angular</h1>
 <h3>Hello from {{componentName}}</h3>
 <h4>{{username}}</h4>
 <form [formGroup]="myForm" novalidate (ngSubmit)="onSubmit(myForm.valid)">
@@ -17,12 +16,11 @@
     <button type="submit">Submit</button>
 </form>
 
-<div>
+<section>
     <button (click)="getSession()">Get session</button>
-</div>
-<div>
     <button (click)="logout()">Log out</button>
-</div>
+    <button (click)="getTime()">get Time</button>
+</section>
 
 <h3>Session info</h3>
 <div>
@@ -35,3 +33,5 @@
 </nav>
 
 <router-outlet></router-outlet>
+
+<h4>{{currentTime}}</h4>

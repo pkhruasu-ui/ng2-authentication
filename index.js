@@ -22,7 +22,8 @@ db.once('open', function(){
 // session implementation (must be first on the list)
 app.use(session({
     secret: 'work hard', // anything is fine
-    resave: true,
+    resave: false,  // so session does not extend on every call. We want to have more control on when to extend
+    cookie: { maxAge: 1000 * 60 * 1},
     saveUninitialized: false
     // don't use below if you want session in memory(for development)
     , store: new MongoStore({

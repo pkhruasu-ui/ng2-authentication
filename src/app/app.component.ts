@@ -12,8 +12,8 @@ export class AppComponent implements OnInit {
     }
 
     public componentName = "My app Component";
-    public myForm:FormGroup;
-    public loginForm: FormGroup;
+    public myForm!:FormGroup;
+    public loginForm!: FormGroup;
     public session:any;
 
     ngOnInit() {
